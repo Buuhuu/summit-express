@@ -1,0 +1,11 @@
+/*
+ * eagerly loaded font faces to workaround a bug in the universal editor
+ * that would load the whole style.css into the editor frame, breaking its style
+ */
+
+@font-face {
+    font-family: 'Trebuchet MS';
+    size-adjust: 90%;
+    src: local('Trebuchet MS'),
+      local('TrebuchetMS');
+}

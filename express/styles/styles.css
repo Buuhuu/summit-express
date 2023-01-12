@@ -1,12 +1,5 @@
 /* default content */
 
-@font-face {
-  font-family: 'Trebuchet MS';
-  size-adjust: 90%;
-  src: local('Trebuchet MS'),
-    local('TrebuchetMS');
-}
-
 :root {
   --color-white: #FFF;
   --color-gray-100: #F8F8F8;
