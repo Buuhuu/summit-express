@@ -230,7 +230,7 @@ export function lazyLoadLottiePlayer($block = null) {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.async = true;
-      script.src = '/express/scripts/lottie-player.1.5.6.js';
+      script.src = `${window.hlx.codeBasePath}/scripts/lottie-player.1.5.6.js`;
       document.head.appendChild(script);
       window['lottie-player'] = true;
     };
@@ -358,10 +358,10 @@ export function getIcon(icons, alt, size = 44) {
     if (size22Icons.includes(icon)) sheetSize = 22;
     return `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-${icon}">
       ${alt ? `<title>${alt}</title>` : ''}
-      <use href="/express/icons/ccx-sheet_${sheetSize}.svg#${iconName}${sheetSize}"></use>
+      <use href="${window.hlx.codeBasePath}/icons/ccx-sheet_${sheetSize}.svg#${iconName}${sheetSize}"></use>
     </svg>`;
   } else {
-    return (`<img class="icon icon-${icon}" src="/express/icons/${icon}.svg" alt="${alt || icon}">`);
+    return (`<img class="icon icon-${icon}" src="${window.hlx.codeBasePath}/icons/${icon}.svg" alt="${alt || icon}">`);
   }
 }
 
@@ -958,8 +958,8 @@ export async function loadBlock(block, eager = false) {
   if (!(block.getAttribute('data-block-status') === 'loading' || block.getAttribute('data-block-status') === 'loaded')) {
     block.setAttribute('data-block-status', 'loading');
     const blockName = block.getAttribute('data-block-name');
-    let cssPath = `/express/blocks/${blockName}/${blockName}.css`;
-    let jsPath = `/express/blocks/${blockName}/${blockName}.js`;
+    let cssPath = `${window.hlx.codeBasePath}/blocks/${blockName}/${blockName}.css`;
+    let jsPath = `${window.hlx.codeBasePath}/blocks/${blockName}/${blockName}.js`;
 
     if (window.hlx.experiment && window.hlx.experiment.run) {
       const { experiment } = window.hlx;
@@ -969,8 +969,8 @@ export async function loadBlock(block, eager = false) {
           const blockIndex = control.blocks.indexOf(blockName);
           const variant = experiment.variants[experiment.selectedVariant];
           const blockPath = variant.blocks[blockIndex];
-          cssPath = `/express/experiments/${experiment.id}/${blockPath}/${blockName}.css`;
-          jsPath = `/express/experiments/${experiment.id}/${blockPath}/${blockName}.js`;
+          cssPath = `${window.hlx.codeBasePath}/experiments/${experiment.id}/${blockPath}/${blockName}.css`;
+          jsPath = `${window.hlx.codeBasePath}/experiments/${experiment.id}/${blockPath}/${blockName}.js`;
         }
       }
     }
@@ -1091,7 +1091,7 @@ function loadMartech() {
   const usp = new URLSearchParams(window.location.search);
   const martech = usp.get('martech');
 
-  const analyticsUrl = '/express/scripts/instrument.js';
+  const analyticsUrl = `${window.hlx.codeBasePath}/scripts/instrument.js`;
   if (!(martech === 'off' || document.querySelector(`head script[src="${analyticsUrl}"]`))) {
     loadScript(analyticsUrl, null, 'module');
   }
@@ -1101,7 +1101,7 @@ function loadGnav() {
   const usp = new URLSearchParams(window.location.search);
   const gnav = usp.get('gnav') || getMetadata('gnav');
 
-  const gnavUrl = '/express/scripts/gnav.js';
+  const gnavUrl = `${window.hlx.codeBasePath}/scripts/gnav.js`;
   if (!(gnav === 'off' || document.querySelector(`head script[src="${gnavUrl}"]`))) {
     loadScript(gnavUrl, null, 'module');
   }
@@ -1114,14 +1114,14 @@ function decoratePageStyle() {
 
   if (isBlog) {
     // eslint-disable-next-line import/no-unresolved,import/no-absolute-path
-    import('/express/scripts/blog.js')
+    import(`${window.hlx.codeBasePath}/scripts/blog.js`)
       .then((mod) => {
         if (mod.default) {
           mod.default();
         }
       })
       .catch((err) => console.log('failed to load blog', err));
-    loadCSS('/express/styles/blog.css');
+    loadCSS(`${window.hlx.codeBasePath}/styles/blog.css`);
   } else {
     // eslint-disable-next-line no-lonely-if
     if ($h1 && !$h1.closest('.section > div > div ')) {
@@ -1462,7 +1462,7 @@ async function decorateTesting() {
     if ((checkTesting() && (martech !== 'off') && (martech !== 'delay')) || martech === 'rush') {
       // eslint-disable-next-line no-console
       console.log('rushing martech');
-      loadScript('/express/scripts/instrument.js', null, 'module');
+      loadScript(`${window.hlx.codeBasePath}/scripts/instrument.js`, null, 'module');
     }
 
     const experiment = getExperiment();
@@ -1513,7 +1513,7 @@ async function decorateTesting() {
 export async function fixIcons(block = document) {
   /* backwards compatible icon handling, deprecated */
   block.querySelectorAll('svg use[href^="./_icons_"]').forEach(($use) => {
-    $use.setAttribute('href', `/express/icons.svg#${$use.getAttribute('href').split('#')[1]}`);
+    $use.setAttribute('href', `${window.hlx.codeBasePath}/icons.svg#${$use.getAttribute('href').split('#')[1]}`);
   });
   const placeholders = await fetchPlaceholders();
   /* new icons handling */
@@ -2219,7 +2219,7 @@ export async function addFreePlanWidget(elem) {
       const $learnMoreButton = createTag('a', { class: 'learn-more-button', href: '#plans-comparison-container' });
       const lottieWrapper = createTag('span', { class: 'lottie-wrapper' });
       $learnMoreButton.textContent = placeholders['learn-more'];
-      lottieWrapper.innerHTML = getLottie('purple-arrows', '/express/blocks/floating-button/purple-arrows.json');
+      lottieWrapper.innerHTML = getLottie('purple-arrows', `${window.hlx.codeBasePath}/blocks/floating-button/purple-arrows.json`);
       $learnMoreButton.append(lottieWrapper);
       lazyLoadLottiePlayer();
       widget.append($learnMoreButton);
@@ -2254,12 +2254,12 @@ async function loadLazy() {
   sampleRUM('lcp');
 
   loadBlocks(main);
-  loadCSS('/express/styles/lazy-styles.css');
+  loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   scrollToHash();
   resolveFragments();
   addPromotion();
   removeMetadata();
-  addFavIcon('/express/icons/cc-express.svg');
+  addFavIcon(`${window.hlx.codeBasePath}/icons/cc-express.svg`);
   if (!window.hlx.lighthouse) loadMartech();
 
   sampleRUM('lazy');
@@ -2275,6 +2275,16 @@ async function decoratePage() {
   window.hlx = window.hlx || {};
   window.hlx.lighthouse = new URLSearchParams(window.location.search).get('lighthouse') === 'on';
   window.hlx.init = true;
+
+  const scriptEl = document.querySelector('script[src$="/scripts/scripts.js"]');
+  if (scriptEl) {
+    try {
+      [window.hlx.codeBasePath] = new URL(scriptEl.src).pathname.split('/scripts/scripts.js');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  }
 
   await loadEager();
   loadLazy();

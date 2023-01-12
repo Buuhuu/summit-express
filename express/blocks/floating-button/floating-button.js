@@ -67,7 +67,7 @@ function initLottieArrow($lottieScrollButton, $floatButtonWrapper, $scrollAnchor
 
 export async function createFloatingButton($a, audience) {
   const main = document.querySelector('main');
-  loadCSS('/express/blocks/floating-button/floating-button.css');
+  loadCSS(`${window.hlx.codeBasePath}/blocks/floating-button/floating-button.css`);
 
   // Floating button html
   const $floatButtonLink = $a.cloneNode(true);
