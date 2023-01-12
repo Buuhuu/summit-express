@@ -1041,22 +1041,25 @@ export function getMetadata(name) {
 
 export async function fetchPlaceholders() {
   if (!window.placeholders) {
+    window.placeholders = {};
     try {
       const locale = getLocale(window.location);
       const urlPrefix = locale === 'us' ? '' : `/${locale}`;
       const resp = await fetch(`${urlPrefix}/express/placeholders.json`);
       const json = await resp.json();
-      window.placeholders = {};
       json.data.forEach((placeholder) => {
         window.placeholders[toClassName(placeholder.Key)] = placeholder.Text;
       });
     } catch {
-      const resp = await fetch('/express/placeholders.json');
-      const json = await resp.json();
-      window.placeholders = {};
-      json.data.forEach((placeholder) => {
-        window.placeholders[toClassName(placeholder.Key)] = placeholder.Text;
-      });
+      try {
+        const resp = await fetch('/express/placeholders.json');
+        const json = await resp.json();
+        json.data.forEach((placeholder) => {
+          window.placeholders[toClassName(placeholder.Key)] = placeholder.Text;
+        });
+      } catch {
+        console.error('failed to load placeholders');
+      }
     }
   }
   return window.placeholders;
